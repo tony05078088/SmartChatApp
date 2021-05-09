@@ -1,0 +1,40 @@
+{
+  "users": {
+    "USERID1": {
+      "name": "Tony",
+      "email": "Tony@test.com",
+      "online": true
+    },
+    "USERID2": {
+      "name": "Jeff",
+      "email": "Jeff@test.com",
+      "online": false
+    }
+  },
+  "chats": {
+    "USERID1": {
+      "USERID2": {
+        "MESSAGE1": {
+          "text": "hi how are you these days?",
+          "from": "them"
+        },
+        "MESSAGE2": {
+          "text": "Good thanks,how about you?",
+          "from": "me"
+        }
+      }
+    },
+    "USERID2": {
+      "USERID1": {
+        "MESSAGE1": {
+          "text": "Do you eat anything yet?",
+          "from": "me"
+        },
+        "MESSAGE2": {
+          "text": "Not Yet,and you??",
+          "from": "them"
+        }
+      }
+    }
+  }
+}
