@@ -47,18 +47,20 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import mixinOtherUserDetails from "../mixins/mixin-other-user-details";
 export default {
+  mixins: [mixinOtherUserDetails],
   computed: {
     ...mapState("store", ["userDetails"]),
     titles() {
       let currentPath = this.$route.fullPath;
       if (currentPath == "/") {
         return "SmartChatApp";
-      } else if (currentPath == "/chat") {
-        return "Chat";
-      } else if (currentPath == "/auth") {
+      } else if (currentPath.includes("/chat")) {
+        return this.otherUserDetails.name;
+      } else if (currentPath.includes("/auth")) {
         return "Auth";
-      } else return false;
+      } else return "";
     }
   },
   methods: {

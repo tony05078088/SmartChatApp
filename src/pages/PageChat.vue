@@ -1,13 +1,13 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="bg-grey-4 text-center">
-      User is offline
+    <q-banner v-if="!otherUserDetails.online" class="bg-grey-4 text-center">
+      {{ otherUserDetails.name }} is offline
     </q-banner>
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        :name="message.from"
+        :name="message.from == 'me' ? userDetails.name : otherUserDetails.name"
         :text="[message.text]"
         :sent="message.from == 'me' ? true : false"
       />
@@ -43,33 +43,39 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+import mixinOtherUserDetails from "src/mixins/mixin-other-user-details";
 export default {
+  mixins: [mixinOtherUserDetails],
   data() {
     return {
-      newMessage: "",
-      messages: [
-        {
-          text: "Hey,how are you ?",
-          from: "me"
-        },
-        {
-          text: "Good Thanks!",
-          from: "them"
-        },
-        {
-          text: "Pretty good",
-          from: "me"
-        }
-      ]
+      newMessage: ""
     };
   },
   methods: {
+    ...mapActions("store", [
+      "firebaseGetMessage",
+      "firebaseStopGettingMessages",
+      "firebaseSendMessage"
+    ]),
     sendMessage() {
-      this.messages.push({
-        text: this.newMessage,
-        from: "me"
+      this.firebaseSendMessage({
+        message: {
+          text: this.newMessage,
+          from: "me"
+        },
+        otherId: this.$route.params.otherId
       });
     }
+  },
+  mounted() {
+    this.firebaseGetMessage(this.$route.params.otherId);
+  },
+  computed: {
+    ...mapState("store", ["messages", "userDetails"])
+  },
+  destroyed() {
+    this.firebaseStopGettingMessages();
   }
 };
 </script>
