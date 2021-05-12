@@ -112,7 +112,6 @@ const actions = {
     }
   },
   firebaseSendMessage({ state }, payload) {
-    console.log(payload);
     firebaseDb
       .ref("chats/" + state.userDetails.userId + "/" + payload.otherId)
       .push(payload.message);
